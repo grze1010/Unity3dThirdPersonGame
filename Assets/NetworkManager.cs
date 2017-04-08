@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class NetworkManager : MonoBehaviour {
 
-    public Camera stanbyCamera;
+    public GameObject stanbyCamera;
     private SpawnSpot[] spawnSpots;
 
     void Start () {
@@ -42,7 +42,7 @@ public class NetworkManager : MonoBehaviour {
     void SpawnMyPlayer()
     {
         //disable standby camera
-        stanbyCamera.enabled = false;
+        stanbyCamera.SetActive(false);
         //place player in spawn spot
         SpawnSpot mySpawnSpot = spawnSpots[0];
         GameObject myPlayerGO = (GameObject)PhotonNetwork.Instantiate("Player", mySpawnSpot.transform.position, mySpawnSpot.transform.rotation, 0);

@@ -134,10 +134,6 @@
     <None Include="Assets\Standard Assets\Characters\RollerBall\RollerBallGuidelines.txt" />
     <None Include="Assets\Standard Assets\Characters\ThirdPersonCharacter\ThirdPersonCharacterGuidelines.txt" />
     <None Include="Assets\Standard Assets\CrossPlatformInput\CrossPlatformInputGuidelines.txt" />
-    <None Include="Assets\_Imported\Photon Unity Networking\Demos\DemoBoxes\Resources\eurof_tt.txt" />
-    <None Include="Assets\_Imported\Photon Unity Networking\Demos\DemoPickup\Assets\3dFont\3dText.shader" />
-    <None Include="Assets\_Imported\Photon Unity Networking\Demos\DemoRockPaperScissors\Assets\OpenSans\Apache License.txt" />
-    <None Include="Assets\_Imported\Photon Unity Networking\Demos\MarcoPolo-Tutorial\marcopolo-readme.txt" />
     <None Include="Assets\_Imported\Photon Unity Networking\changelog.txt" />
     <None Include="Assets\_Imported\Photon Unity Networking\link.xml" />
     <None Include="Assets\_Imported\Photon Unity Networking\readme.txt" />
