@@ -5,6 +5,7 @@ public class NetworkManager : MonoBehaviour {
 
     public GameObject stanbyCamera;
     private SpawnSpot[] spawnSpots;
+    private int mySpotIndex = 0;
 
     void Start () {
         spawnSpots = GameObject.FindObjectsOfType<SpawnSpot>();
@@ -30,7 +31,10 @@ public class NetworkManager : MonoBehaviour {
     void OnPhotonRandomJoinFailed()
     {
         Debug.Log("OnPhotonRandomJoinedFailed");
-        PhotonNetwork.CreateRoom(null);
+        RoomOptions options = new RoomOptions();
+        options.MaxPlayers = 2;
+        mySpotIndex = 1;
+        PhotonNetwork.CreateRoom(null,options,null);
     }
 
     void OnJoinedRoom()
@@ -44,10 +48,11 @@ public class NetworkManager : MonoBehaviour {
         //disable standby camera
         stanbyCamera.SetActive(false);
         //place player in spawn spot
-        SpawnSpot mySpawnSpot = spawnSpots[0];
+        SpawnSpot mySpawnSpot = spawnSpots[mySpotIndex];
         GameObject myPlayerGO = (GameObject)PhotonNetwork.Instantiate("Player", mySpawnSpot.transform.position, mySpawnSpot.transform.rotation, 0);
         //activate player scripts and camera
         ((MonoBehaviour)myPlayerGO.GetComponent("RigidbodyFirstPersonController")).enabled = true;
         myPlayerGO.transform.FindChild("PlayerFirstPersonCam").gameObject.SetActive(true);
     }
+
 }
