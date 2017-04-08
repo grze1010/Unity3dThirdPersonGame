@@ -91,6 +91,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\NetworkManager.cs" />
+    <Compile Include="Assets\SpawnSpot.cs" />
     <Compile Include="Assets\_Imported\Photon Unity Networking\Demos\Demo2DJumpAndRunWithPhysics\Scripts\Demo2DJumpAndRun.cs" />
     <Compile Include="Assets\_Imported\Photon Unity Networking\Demos\Demo2DJumpAndRunWithPhysics\Scripts\JumpAndRunMovement.cs" />
     <Compile Include="Assets\_Imported\Photon Unity Networking\Demos\DemoBoxes\ColorPerPlayer.cs" />
