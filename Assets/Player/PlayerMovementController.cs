@@ -7,6 +7,7 @@ public class PlayerMovementController : MonoBehaviour {
     private CharacterController cc;
     private Animator animator;
 
+    private bool isCursorLocked = true;
     private float vertVelocity = 0f;
     private bool inJump = false;
 
@@ -34,6 +35,7 @@ public class PlayerMovementController : MonoBehaviour {
 	
 	void Update () {
         ReadInputs();
+        InternalLockUpdate();
     }
 
     void FixedUpdate()
@@ -131,5 +133,28 @@ public class PlayerMovementController : MonoBehaviour {
         //mouse look y - rotate cam
         Quaternion yQuaternion = Quaternion.AngleAxis(mouseY, Vector3.left);
         playerCam.transform.localRotation = playerCam.transform.localRotation * yQuaternion;
+    }
+
+    private void InternalLockUpdate()
+    {
+        if (Input.GetKeyUp(KeyCode.Escape))
+        {
+            isCursorLocked = false;
+        }
+        else if (Input.GetMouseButtonUp(0))
+        {
+            isCursorLocked = true;
+        }
+
+        if (isCursorLocked)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+        else if (!isCursorLocked)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
     }
 }

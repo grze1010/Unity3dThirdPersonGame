@@ -10,11 +10,10 @@ public class NetworkManager : MonoBehaviour {
     void Start () {
         spawnSpots = GameObject.FindObjectsOfType<SpawnSpot>();
         Connect();
-
     }
-	
-	void Connect () {
-        PhotonNetwork.ConnectUsingSettings("0.0");
+
+    void Connect () {
+        PhotonNetwork.ConnectUsingSettings("0.1");
 	}
 
     void OnGUI()
