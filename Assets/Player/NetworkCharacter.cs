@@ -9,6 +9,8 @@ public class NetworkCharacter : Photon.MonoBehaviour {
     Vector2 realAnimPos = Vector2.zero;
     Animator animator;
 
+    float smoothingVar = 0.3f;
+
 	// Use this for initialization
 	void Start () {
         animator = this.GetComponent<Animator>();
@@ -22,9 +24,12 @@ public class NetworkCharacter : Photon.MonoBehaviour {
         }
         else
         {
-            transform.position = Vector3.Lerp(transform.position, realPosition, 0.3f); //lerp - smooth movement
-            transform.rotation = Quaternion.Lerp(transform.rotation, realRotation, 0.3f);
-            Vector2 realAnimPosAftLerp = Vector2.Lerp(new Vector2(animator.GetFloat("VerticalF"), animator.GetFloat("HorizontalF")), realAnimPos, 0.3f);
+            //position
+            transform.position = Vector3.Lerp(transform.position, realPosition, smoothingVar);
+            //rotation
+            transform.rotation = Quaternion.Lerp(transform.rotation, realRotation, smoothingVar);
+            //animations
+            Vector2 realAnimPosAftLerp = Vector2.Lerp(new Vector2(animator.GetFloat("VerticalF"), animator.GetFloat("HorizontalF")), realAnimPos, smoothingVar);
             animator.SetFloat("VerticalF", realAnimPosAftLerp.x);
             animator.SetFloat("HorizontalF", realAnimPosAftLerp.y);
         }

@@ -7,16 +7,25 @@ public class PlayerMovementController : MonoBehaviour {
     private CharacterController cc;
     private Animator animator;
 
-
-    private Vector3 direction;
-    private float speedFactor;
     private float vertVelocity = 0f;
-    private bool startJump = false;
     private bool inJump = false;
 
-    public float jumpSpeed = 3f;
-    public float movementSpeed = 1f;
-    public float sprintSpeed = 2f;
+    //from player
+    private Vector3 direction;
+    private float speedFactor;
+    private bool startJump = false;
+    private float mouseX;
+    private float mouseY;
+    private float minY;
+    private float maxY;
+
+    //public vars
+    public float jumpSpeed = 4f;
+    public float movementSpeed = 1.5f;
+    public float sprintSpeed = 2.5f;
+    public float mouseSpeedX = 10f;
+    public float mouseSpeedY = 5f;
+    public GameObject playerCam;
 
     void Start () {
         animator = this.GetComponent<Animator>();
@@ -30,12 +39,11 @@ public class PlayerMovementController : MonoBehaviour {
     void FixedUpdate()
     {
         StandardMovementAndAnimator();
-        MouseLook();
     }
 
     void LateUpdate()
     {
-        //camera updates
+        MouseLook();
     }
 
     void ReadInputs()
@@ -43,7 +51,10 @@ public class PlayerMovementController : MonoBehaviour {
         speedFactor = Input.GetKey(KeyCode.LeftShift) ? 2f : 1f;
         direction = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
 
-        if(cc.isGrounded && Input.GetButtonDown("Jump"))
+        mouseX = Input.GetAxis("Mouse X") * mouseSpeedX;
+        mouseY = Input.GetAxis("Mouse Y") * mouseSpeedY;
+
+        if (cc.isGrounded && Input.GetButtonDown("Jump"))
         {
             startJump = true;
         }
@@ -51,6 +62,10 @@ public class PlayerMovementController : MonoBehaviour {
 
     void StandardMovementAndAnimator()
     {
+        //mouse look x - rotate player (cam goes with him)
+        Quaternion xQuaternion = Quaternion.AngleAxis(mouseX, Vector3.up);
+        transform.localRotation = transform.localRotation * xQuaternion;
+
         //standard movement
         animator.SetFloat("VerticalF", speedFactor * direction.z);
         animator.SetFloat("HorizontalF", speedFactor * direction.x);
@@ -113,6 +128,8 @@ public class PlayerMovementController : MonoBehaviour {
 
     void MouseLook()
     {
-
+        //mouse look y - rotate cam
+        Quaternion yQuaternion = Quaternion.AngleAxis(mouseY, Vector3.left);
+        playerCam.transform.localRotation = playerCam.transform.localRotation * yQuaternion;
     }
 }
