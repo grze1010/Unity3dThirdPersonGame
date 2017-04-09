@@ -49,10 +49,10 @@ public class NetworkManager : MonoBehaviour {
         stanbyCamera.SetActive(false);
         //place player in spawn spot
         SpawnSpot mySpawnSpot = spawnSpots[mySpotIndex];
-        GameObject myPlayerGO = (GameObject)PhotonNetwork.Instantiate("Player", mySpawnSpot.transform.position, mySpawnSpot.transform.rotation, 0);
+        GameObject myPlayerGO = (GameObject)PhotonNetwork.Instantiate("PlayerController", mySpawnSpot.transform.position, mySpawnSpot.transform.rotation, 0);
         //activate player scripts and camera
-        ((MonoBehaviour)myPlayerGO.GetComponent("RigidbodyFirstPersonController")).enabled = true;
-        myPlayerGO.transform.FindChild("PlayerFirstPersonCam").gameObject.SetActive(true);
+        ((MonoBehaviour)myPlayerGO.GetComponent("PlayerMovementController")).enabled = true;
+        myPlayerGO.transform.FindChild("PlayerCamera").gameObject.SetActive(true);
     }
 
 }

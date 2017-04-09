@@ -151,6 +151,7 @@
     <None Include="Assets\_Imported\Photon Unity Networking\readme.txt" />
     <None Include="Assets\_Imported\Plugins\Photon3Unity3D.xml" />
     <None Include="Assets\_Imported\Plugins\release_history.txt" />
+    <None Include="Assets\_Imported\Raw Mocap Data\Animations\_CompleteAnimationList.txt" />
     <None Include="Assets\_Imported\TinyTerrain\Materials\TerrainSurface.shader" />
     <None Include="Assets\_Imported\TinyTerrain\README.txt" />
     <None Include="Assets\_Imported\TinyTerrain\Standard Assets\Skyboxes\_skybox info.txt" />
