@@ -91,8 +91,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\CRE_NET_Manager.cs" />
+    <Compile Include="Assets\Crate.cs" />
     <Compile Include="Assets\Player\Scripts\CRE_CTRL_PlayerMovement.cs" />
     <Compile Include="Assets\Player\Scripts\CRE_NET_Character.cs" />
+    <Compile Include="Assets\PlayerShooting.cs" />
     <Compile Include="Assets\SpawnSpot\CRE_SpawnSpot.cs" />
     <Compile Include="Assets\_Imported\Photon Unity Networking\Plugins\PhotonNetwork\CustomTypes.cs" />
     <Compile Include="Assets\_Imported\Photon Unity Networking\Plugins\PhotonNetwork\Enums.cs" />

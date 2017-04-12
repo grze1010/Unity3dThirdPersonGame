@@ -39,6 +39,7 @@ public class CRE_NET_Manager : MonoBehaviour {
     void OnJoinedRoom()
     {
         Debug.Log("OnJoinRoom");
+        //cre_todo wait for second player
         SpawnMyPlayer();
     }
 
@@ -51,7 +52,9 @@ public class CRE_NET_Manager : MonoBehaviour {
         GameObject myPlayerGO = (GameObject)PhotonNetwork.Instantiate("PlayerController", mySpawnSpot.transform.position, mySpawnSpot.transform.rotation, 0);
         //activate player scripts and camera
         ((MonoBehaviour)myPlayerGO.GetComponent("CRE_CTRL_PlayerMovement")).enabled = true;
-        myPlayerGO.transform.FindChild("PlayerCamera").gameObject.SetActive(true);
+        //((MonoBehaviour)myPlayerGO.GetComponent("PlayerShooting")).enabled = true;
+        myPlayerGO.transform.FindChild("CameraAnchor").gameObject.SetActive(true);
+        myPlayerGO.transform.FindChild("CameraTarget").gameObject.SetActive(true);
     }
 
 }
