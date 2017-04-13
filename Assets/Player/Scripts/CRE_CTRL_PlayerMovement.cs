@@ -9,10 +9,14 @@ public class CRE_CTRL_PlayerMovement : MonoBehaviour {
 
     //variables for scripts
     private bool isCursorLocked = true;
-    private float vertVelocity = 0f;
+    private float zVelocity = 0f;
+    //private float verticalVelocity = 0f;
+    private float horizontalVelocity = 0f;
     private bool inJump = false;
+    private bool inFlipDodge = false;
     private static float currentTargetYAngle;
     //private static float currentCameraYAngle;
+    private Vector2 maxCurrentTime_DoubleClickFlipDodge = Vector2.zero;
 
     //from player
     private Vector3 direction;
@@ -20,6 +24,7 @@ public class CRE_CTRL_PlayerMovement : MonoBehaviour {
     private bool startJump = false;
     private Vector2 mouseDelta;
     private float scrollInput;
+    private bool startFlipDodge = false;
 
     //objects
     public GameObject playerCam;
@@ -27,7 +32,8 @@ public class CRE_CTRL_PlayerMovement : MonoBehaviour {
     public GameObject cameraAnchor;
 
     //settings
-    private static float JUMP_SPEED = 6f;
+    private static float JUMP_POWER = 6f;
+    private static float FLIP_JUMP_POWER = 5f;
     private static float MOVEMENT_SPRINT = 1.5f;
     private static float SPRINT_SPEED = 2.5f;
     private static Vector2 MOUSE_SPEED_DELTA = new Vector2(10f, 10f);
@@ -36,6 +42,7 @@ public class CRE_CTRL_PlayerMovement : MonoBehaviour {
     private static float MAX_TARGET_Y_ANGLE = 70;
     private Vector3 CAMERA_OFFSET_TO_ANCHOR;
     private Vector3 CAMERA_TARGET_OFFSET_TO_PLAYER;
+    private static float MAX_TIME_BETWEEN_DOUBLE_CLICKS = 0.3f;
 
     void Start () {
         animator = this.GetComponent<Animator>();
@@ -65,7 +72,7 @@ public class CRE_CTRL_PlayerMovement : MonoBehaviour {
         RaycastHit hitInfo = FindClosestHitInfo(ray);
         if (hitInfo.transform != null) //hit
         {
-            Debug.Log("towards: " + hitInfo.collider.name);
+            //Debug.Log("towards: " + hitInfo.collider.name);
         }
     }
 
@@ -83,16 +90,38 @@ public class CRE_CTRL_PlayerMovement : MonoBehaviour {
         {
             startJump = true;
         }
+
+        if (cc.isGrounded && Input.GetKeyDown(KeyCode.A))
+        {
+            if (!inFlipDodge && maxCurrentTime_DoubleClickFlipDodge.x >= Time.time)
+            {
+                startFlipDodge = true;
+                Debug.Log("startFlipDodge left");
+            }
+            maxCurrentTime_DoubleClickFlipDodge.x = Time.time + MAX_TIME_BETWEEN_DOUBLE_CLICKS;
+        }
+        if (cc.isGrounded && Input.GetKeyDown(KeyCode.D))
+        {
+            if (!inFlipDodge && maxCurrentTime_DoubleClickFlipDodge.y >= Time.time)
+            {
+                startFlipDodge = true;
+                Debug.Log("startFlipDodge right");
+            }
+            maxCurrentTime_DoubleClickFlipDodge.y = Time.time + MAX_TIME_BETWEEN_DOUBLE_CLICKS;
+        }
     }
 
     void StandardMovementAndAnimator()
     {
+        Vector3 movement = Vector3.zero;
         //standard movement
         animator.SetFloat("VerticalF", speedFactor * direction.z);
         animator.SetFloat("HorizontalF", speedFactor * direction.x);
 
         float speed = speedFactor == 2f ? SPRINT_SPEED : MOVEMENT_SPRINT;
-        Vector3 movement = transform.rotation * direction * speed * Time.deltaTime; //standard movement
+        if (!inFlipDodge) {
+            movement = transform.rotation * direction * speed * Time.deltaTime; //standard movement
+        }
 
         //jump
         if (startJump) //start jump
@@ -108,28 +137,44 @@ public class CRE_CTRL_PlayerMovement : MonoBehaviour {
             LandJump();
         }
 
+        //FlipDodge
+        if (startFlipDodge)
+        {
+            StartFlipDodge();
+        }
+        else if (inFlipDodge && cc.isGrounded)
+        {
+            EndFlipDodge();
+        }
+
 
         //falling/gravity
         if (!cc.isGrounded)
         {
-            vertVelocity += Physics.gravity.y * Time.deltaTime;
+            zVelocity += Physics.gravity.y * Time.deltaTime;
         }
-        movement.y = vertVelocity * Time.deltaTime;
+        movement.y = zVelocity * Time.deltaTime;
+
+        if (inFlipDodge)
+        {
+            movement.x = horizontalVelocity * Time.deltaTime;
+            movement = transform.rotation * movement;
+        }
         
+
         //apply movement
         cc.Move(movement);
     }
 
     void StartJump()
     {
-        Debug.Log("StartJump");
         //start jump animation
         animator.SetBool("Jump", true);
         //start upwords movement
-        vertVelocity = speedFactor == 2f ? (JUMP_SPEED * (SPRINT_SPEED/MOVEMENT_SPRINT)) * 2/3 : JUMP_SPEED; //jump higher if running
+        zVelocity = speedFactor == 2f ? (JUMP_POWER * (SPRINT_SPEED/MOVEMENT_SPRINT)) * 2/3 : JUMP_POWER; //jump higher if running
         //setup new collider shape
-        cc.height -= 0.2f;
-        cc.radius += 0.4f;
+        //cc.height -= 0.2f;
+        //cc.radius += 0.4f;
         //set vars
         inJump = true;
         startJump = false;
@@ -137,14 +182,35 @@ public class CRE_CTRL_PlayerMovement : MonoBehaviour {
 
     void LandJump()
     {
-        Debug.Log("LandJump");
         //start land animation
         animator.SetBool("Jump", false);
         //reset collider
-        cc.height += 0.2f;
-        cc.radius -= 0.4f;
+        //cc.height += 0.2f;
+        //cc.radius -= 0.4f;
         //set vars
         inJump = false;
+    }
+
+    void StartFlipDodge()
+    {
+        //start jump animation
+        animator.SetBool("FlipDodge", true);
+        //start movement
+        //leftrightmovement
+        horizontalVelocity = 3f * (direction.x > 0 ? 1 : -1);
+        zVelocity = FLIP_JUMP_POWER;
+        //setup new collider shape
+        //
+        //set vars
+        inFlipDodge = true;
+        startFlipDodge = false;
+    }
+
+    void EndFlipDodge()
+    {
+        animator.SetBool("FlipDodge", false);
+        inFlipDodge = false;
+        horizontalVelocity = 0f;
     }
 
     void MouseLook() //mouse look y - rotate cam
