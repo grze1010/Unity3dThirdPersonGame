@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class CRE_NET_Manager : MonoBehaviour {
+public class CRE_NET_Main : MonoBehaviour {
 
     public GameObject stanbyCamera;
     private CRE_SpawnSpot[] spawnSpots;
@@ -51,8 +51,8 @@ public class CRE_NET_Manager : MonoBehaviour {
         CRE_SpawnSpot mySpawnSpot = spawnSpots[mySpotIndex];
         GameObject myPlayerGO = (GameObject)PhotonNetwork.Instantiate("PlayerController", mySpawnSpot.transform.position, mySpawnSpot.transform.rotation, 0);
         //activate player scripts and camera
-        ((MonoBehaviour)myPlayerGO.GetComponent("CRE_CTRL_PlayerMovement")).enabled = true;
-        //((MonoBehaviour)myPlayerGO.GetComponent("PlayerShooting")).enabled = true;
+        ((MonoBehaviour)myPlayerGO.GetComponent("CRE_CTRL_Player")).enabled = true;
+        ((MonoBehaviour)myPlayerGO.GetComponent("CRE_MNG_Player")).enabled = true;
         myPlayerGO.transform.FindChild("CameraAnchor").gameObject.SetActive(true);
         myPlayerGO.transform.FindChild("CameraTarget").gameObject.SetActive(true);
     }

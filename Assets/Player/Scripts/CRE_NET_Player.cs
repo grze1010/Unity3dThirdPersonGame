@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CRE_NET_Character : Photon.MonoBehaviour {
+public class CRE_NET_Player : Photon.MonoBehaviour {
 
     Vector3 realPosition = Vector3.zero;
     Quaternion realRotation = Quaternion.identity;
